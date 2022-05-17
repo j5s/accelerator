@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/4ra1n/accelerator/classfile"
 	"github.com/4ra1n/accelerator/core"
+	"github.com/4ra1n/accelerator/files"
 	"github.com/4ra1n/accelerator/global"
 	"github.com/4ra1n/accelerator/ref"
 	"io/ioutil"
@@ -11,13 +12,13 @@ import (
 )
 
 func main() {
-	//files.RemoveTempFiles()
-	//files.UnzipJars(".")
-	//classes := files.ReadAllClasses()
-	//for _, c := range classes {
-	//	start(c)
-	//}
-	start("Test.class")
+	files.RemoveTempFiles()
+	files.UnzipJars(".")
+	classes := files.ReadAllClasses()
+	for _, c := range classes {
+		start(c)
+	}
+	//start("Test.class")
 }
 
 func start(class string) {
@@ -50,8 +51,14 @@ func start(class string) {
 			inst := core.NewInstruction(opcode)
 			inst.FetchOperands(reader)
 			ops := inst.GetOperands()
-			fmt.Println(getInstructionName(inst), ops)
-
+			instName := getInstructionName(inst)
+			var out string
+			if len(ops) == 0 {
+				out = fmt.Sprintf("%s", instName)
+			} else {
+				out = fmt.Sprintf("%s %s", instName, ops[0])
+			}
+			fmt.Println(out)
 			thread.SetPC(reader.PC())
 		}
 	}
