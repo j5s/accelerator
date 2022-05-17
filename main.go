@@ -18,7 +18,6 @@ func main() {
 	for _, c := range classes {
 		start(c)
 	}
-	//start("Test.class")
 }
 
 func start(class string) {
@@ -30,7 +29,6 @@ func start(class string) {
 
 	cl := ref.NewClass(cf)
 	global.CP = cf.ConstantPool()
-	fmt.Println(cl.Name())
 
 	for _, method := range cf.Methods() {
 		codeAttr := method.CodeAttribute()
@@ -40,10 +38,13 @@ func start(class string) {
 		bytecode := codeAttr.Code()
 		thread := core.Thread{}
 		reader := &core.BytecodeReader{}
-		fmt.Println(method.Name())
+		instSet := core.InstructionSet{}
+		instSet.ClassName = cl.Name()
+		instSet.MethodName = method.Name()
+		instSet.Desc = method.Descriptor()
+
 		for {
 			if thread.PC() >= len(bytecode) {
-				fmt.Println()
 				break
 			}
 			reader.Reset(bytecode, thread.PC())
@@ -51,16 +52,17 @@ func start(class string) {
 			inst := core.NewInstruction(opcode)
 			inst.FetchOperands(reader)
 			ops := inst.GetOperands()
-			instName := getInstructionName(inst)
-			var out string
-			if len(ops) == 0 {
-				out = fmt.Sprintf("%s", instName)
-			} else {
-				out = fmt.Sprintf("%s %s", instName, ops[0])
+
+			instEntry := core.InstructionEntry{
+				Instrument: getInstructionName(inst),
+				Operands:   ops,
 			}
-			fmt.Println(out)
+			instSet.InstArray = append(instSet.InstArray, instEntry)
+
 			thread.SetPC(reader.PC())
 		}
+
+		fmt.Println(instSet)
 	}
 }
 
