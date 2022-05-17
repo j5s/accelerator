@@ -7,6 +7,7 @@ import (
 	"github.com/4ra1n/accelerator/files"
 	"github.com/4ra1n/accelerator/global"
 	"github.com/4ra1n/accelerator/ref"
+	"github.com/4ra1n/accelerator/rule"
 	"io/ioutil"
 	"strings"
 )
@@ -58,15 +59,43 @@ func start(class string) {
 				Operands:   ops,
 			}
 			instSet.InstArray = append(instSet.InstArray, instEntry)
-
 			thread.SetPC(reader.PC())
 		}
-
-		fmt.Println(instSet)
+		doAnalysis(instSet)
 	}
 }
 
 func getInstructionName(instruction core.Instruction) string {
 	i := fmt.Sprintf("%T", instruction)
 	return strings.Split(i, ".")[1]
+}
+
+func doAnalysis(instSet core.InstructionSet) {
+	analysisRule := rule.GetRule()
+	ruleLen := len(analysisRule)
+	var ruleLenState []bool
+	i := 0
+	for _, inst := range instSet.InstArray {
+		if inst.Instrument != analysisRule[i][0] {
+			continue
+		}
+		splits := strings.Split(inst.Operands[0], " ")
+		stdName := splits[0]
+		stdDesc := splits[1]
+		if analysisRule[i][1] != stdName {
+			continue
+		}
+		if analysisRule[i][2] == stdDesc ||
+			analysisRule[i][2] == "*" {
+			ruleLenState = append(ruleLenState, true)
+			if i != ruleLen-1 {
+				i++
+			} else {
+				break
+			}
+		}
+	}
+	if len(ruleLenState) == ruleLen {
+		fmt.Println(instSet.ClassName, instSet.MethodName)
+	}
 }

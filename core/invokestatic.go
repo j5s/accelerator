@@ -31,7 +31,7 @@ func (self *INVOKESTATIC) GetOperands() []string {
 	}
 
 	ret := make([]string, 1)
-	out := fmt.Sprintf("%s %s %s", className, methodName, desc)
+	out := fmt.Sprintf("%s.%s %s", className, methodName, desc)
 	ret[0] = out
 	return ret
 }
