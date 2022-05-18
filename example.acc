@@ -1,3 +1,0 @@
-
-INVOKESPECIAL java/io/File.<init> *
-INVOKESPECIAL org/xml/sax/InputSource.<init> *

@@ -1,0 +1,3 @@
+INVOKESPECIAL org/springframework/expression/spel/support/StandardEvaluationContext.<init> *
+INVOKEVIRTUAL org/springframework/expression/spel/standard/SpelExpressionParser.parseExpression *
+INVOKEINTERFACE org/springframework/expression/Expression.getValue *

@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-func GetRule() [][]string {
+func GetRule(ruleFile string) [][]string {
 	var rule [][]string
-	data, _ := ioutil.ReadFile("example.acc")
+	data, _ := ioutil.ReadFile(ruleFile)
 	lines := strings.Split(string(data)+"\n", "\n")
 	for _, line := range lines {
 		line = strings.Trim(line, "\r")
