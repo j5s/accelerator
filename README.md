@@ -1,10 +1,18 @@
 # Accelerator
 
+[中文介绍](https://github.com/4ra1n/accelerator/tree/master/doc)
+
 Batch analysis jar packages using Golang
 
 Use to detect security vulnerabilities
 
 This will be much simpler and faster than Java ASM
+
+The tool is an auxiliary tool that can help security researchers analyze jar files quickly, especially for some closed source projects
+
+The advantage of using this is that it is easy to start and efficient detection
+
+The disadvantage of using this is that it cannot be customized too much, and there is the possibility of false positives in the case of multiple instructions
 
 ## Quick Start
 
